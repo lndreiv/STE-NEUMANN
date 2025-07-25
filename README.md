@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -58,9 +59,6 @@
         }
         
         .admin-access {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
             opacity: 0.05;
             transition: opacity 0.3s ease;
         }
@@ -130,9 +128,12 @@
             </div>
         </div>
         
-        <!-- Footer -->
+        <!-- Footer with Hidden Admin Access -->
         <footer class="text-center mt-8 text-white text-opacity-70 text-sm">
             <p>All messages are stored securely.</p>
+            <div class="mt-8 admin-access">
+                <button id="admin-access-btn" class="text-white text-opacity-50 text-xs">Admin Access</button>
+            </div>
         </footer>
     </div>
     
@@ -240,11 +241,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Hidden Admin Access Button -->
-    <div class="admin-access">
-        <button id="admin-access-btn" class="text-white text-opacity-50 text-xs">•</button>
     </div>
     
     <script>
@@ -577,5 +573,5 @@
             console.log("Page loaded, messages count:", messages.length);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9649a39896203d35',t:'MTc1MzQyNTM0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9649aa23e6f73d35',t:'MTc1MzQyNTYxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
