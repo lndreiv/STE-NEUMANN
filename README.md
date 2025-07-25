@@ -1,4 +1,3 @@
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +9,7 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
             min-height: 100vh;
         }
         
@@ -34,7 +33,7 @@
         }
         
         .custom-file-upload:hover {
-            background-color: #4338ca;
+            background-color: #e02d1b;
         }
         
         .notification-badge {
@@ -59,12 +58,33 @@
         }
         
         .admin-access {
-            opacity: 0.1;
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            opacity: 0.05;
             transition: opacity 0.3s ease;
         }
         
         .admin-access:hover {
-            opacity: 0.5;
+            opacity: 0.3;
+        }
+        
+        .gradient-button {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 30px rgba(255, 75, 43, 0.2);
+        }
+        
+        .header-text-shadow {
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -72,21 +92,21 @@
     <div id="landing-page" class="container mx-auto max-w-4xl">
         <!-- Header -->
         <header class="text-center py-8">
-            <h1 class="text-4xl font-bold text-white mb-2">STE NEUMANN ANONYMOUS MESSAGE BOX</h1>
+            <h1 class="text-4xl font-bold text-white mb-2 header-text-shadow">STE NEUMANN ANONYMOUS MESSAGE BOX</h1>
             <p class="text-white text-opacity-80">Share your thoughts anonymously</p>
         </header>
         
         <!-- Main Content -->
-        <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+        <div class="bg-white rounded-xl shadow-xl overflow-hidden card-shadow">
             <div class="p-6">
                 <div class="mb-6">
                     <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Your Message</label>
-                    <textarea id="message" rows="6" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none" placeholder="Type your anonymous message here..."></textarea>
+                    <textarea id="message" rows="6" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 resize-none" placeholder="Type your anonymous message here..."></textarea>
                 </div>
                 
                 <div class="mb-6">
                     <div class="flex items-center space-x-4">
-                        <label class="custom-file-upload flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        <label class="custom-file-upload flex items-center px-4 py-2 gradient-button text-white rounded-lg transition">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
@@ -101,7 +121,7 @@
                     </div>
                 </div>
                 
-                <button id="send-button" class="w-full bg-indigo-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-indigo-700 transition flex items-center justify-center">
+                <button id="send-button" class="w-full gradient-button text-white py-3 px-6 rounded-lg font-medium transition flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                     </svg>
@@ -110,12 +130,9 @@
             </div>
         </div>
         
-        <!-- Footer with Hidden Admin Access -->
+        <!-- Footer -->
         <footer class="text-center mt-8 text-white text-opacity-70 text-sm">
             <p>All messages are stored securely.</p>
-            <div class="mt-8 admin-access">
-                <button id="admin-access-btn" class="text-white text-opacity-50 text-xs">Admin Access</button>
-            </div>
         </footer>
     </div>
     
@@ -123,18 +140,18 @@
     <div id="admin-page" class="container mx-auto max-w-4xl hidden">
         <!-- Header -->
         <header class="text-center py-8">
-            <h1 class="text-4xl font-bold text-white mb-2">STE NEUMANN ANONYMOUS MESSAGE BOX</h1>
+            <h1 class="text-4xl font-bold text-white mb-2 header-text-shadow">STE NEUMANN ANONYMOUS MESSAGE BOX</h1>
             <p class="text-white text-opacity-80">Admin Portal</p>
         </header>
         
         <!-- Main Content -->
-        <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+        <div class="bg-white rounded-xl shadow-xl overflow-hidden card-shadow">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-xl font-semibold text-gray-800">Your Messages</h2>
                     <div class="flex space-x-4">
-                        <button id="mark-all-read" class="text-sm text-indigo-600 hover:text-indigo-800">Mark all as read</button>
-                        <button id="back-to-home" class="text-indigo-600 hover:text-indigo-800 flex items-center">
+                        <button id="mark-all-read" class="text-sm text-red-600 hover:text-red-800">Mark all as read</button>
+                        <button id="back-to-home" class="text-red-600 hover:text-red-800 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg>
@@ -152,14 +169,17 @@
         </div>
         
         <!-- Admin Controls -->
-        <div class="bg-white rounded-xl shadow-xl overflow-hidden mt-6 p-6">
+        <div class="bg-white rounded-xl shadow-xl overflow-hidden mt-6 p-6 card-shadow">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Admin Controls</h3>
-            <div class="flex space-x-4">
+            <div class="flex flex-wrap gap-4">
                 <button id="clear-all-messages" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
                     Clear All Messages
                 </button>
-                <button id="export-messages" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                <button id="export-messages" class="px-4 py-2 gradient-button text-white rounded-lg transition">
                     Export Messages
+                </button>
+                <button id="debug-messages" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    Debug Messages
                 </button>
             </div>
         </div>
@@ -176,7 +196,7 @@
                 </div>
                 <h3 class="text-lg font-medium text-gray-900 mb-2">Message Sent!</h3>
                 <p class="text-gray-600 mb-6">Your anonymous message has been delivered successfully.</p>
-                <button id="close-modal" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-indigo-700 transition">
+                <button id="close-modal" class="w-full gradient-button text-white py-2 px-4 rounded-lg font-medium transition">
                     Close
                 </button>
             </div>
@@ -187,24 +207,44 @@
     <div id="password-modal" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 hidden">
         <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
             <div class="text-center">
-                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                 </div>
                 <h3 class="text-lg font-medium text-gray-900 mb-2">Admin Access</h3>
                 <p class="text-gray-600 mb-4">Enter your admin password to continue.</p>
-                <input type="password" id="admin-password" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4" placeholder="Password">
+                <input type="password" id="admin-password" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 mb-4" placeholder="Password">
                 <div class="flex space-x-4">
                     <button id="cancel-password" class="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-lg font-medium hover:bg-gray-300 transition">
                         Cancel
                     </button>
-                    <button id="submit-password" class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-indigo-700 transition">
+                    <button id="submit-password" class="flex-1 gradient-button text-white py-2 px-4 rounded-lg font-medium transition">
                         Login
                     </button>
                 </div>
             </div>
         </div>
+    </div>
+    
+    <!-- Debug Modal -->
+    <div id="debug-modal" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-xl p-6 max-w-4xl w-full mx-4 shadow-2xl max-h-[80vh] overflow-auto">
+            <div class="text-left">
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Debug Information</h3>
+                <pre id="debug-content" class="bg-gray-100 p-4 rounded-lg overflow-auto max-h-[60vh] text-xs"></pre>
+                <div class="mt-4 flex justify-end">
+                    <button id="close-debug" class="gradient-button text-white py-2 px-4 rounded-lg font-medium transition">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden Admin Access Button -->
+    <div class="admin-access">
+        <button id="admin-access-btn" class="text-white text-opacity-50 text-xs">•</button>
     </div>
     
     <script>
@@ -228,6 +268,7 @@
         const backToHome = document.getElementById('back-to-home');
         const clearAllMessagesBtn = document.getElementById('clear-all-messages');
         const exportMessagesBtn = document.getElementById('export-messages');
+        const debugMessagesBtn = document.getElementById('debug-messages');
         
         // DOM Elements - Modals
         const successModal = document.getElementById('success-modal');
@@ -236,14 +277,41 @@
         const adminPassword = document.getElementById('admin-password');
         const submitPassword = document.getElementById('submit-password');
         const cancelPassword = document.getElementById('cancel-password');
-        
-        // State
-        let messages = JSON.parse(localStorage.getItem('anonymousMessages')) || [];
-        let unreadCount = messages.filter(msg => !msg.read).length;
-        let currentImageData = null;
+        const debugModal = document.getElementById('debug-modal');
+        const debugContent = document.getElementById('debug-content');
+        const closeDebug = document.getElementById('close-debug');
         
         // Admin password - Change this to your desired password
         const ADMIN_PASSWORD = "admin123"; // You should change this!
+        
+        // Load messages from localStorage
+        function loadMessages() {
+            try {
+                const storedMessages = localStorage.getItem('anonymousMessages');
+                if (storedMessages) {
+                    return JSON.parse(storedMessages);
+                }
+            } catch (error) {
+                console.error("Error loading messages:", error);
+            }
+            return [];
+        }
+        
+        // Save messages to localStorage
+        function saveMessages(messages) {
+            try {
+                localStorage.setItem('anonymousMessages', JSON.stringify(messages));
+                return true;
+            } catch (error) {
+                console.error("Error saving messages:", error);
+                return false;
+            }
+        }
+        
+        // State
+        let messages = loadMessages();
+        let unreadCount = messages.filter(msg => !msg.read).length;
+        let currentImageData = null;
         
         // Navigation Functions
         function showAdminPage() {
@@ -329,20 +397,24 @@
             
             // Add to messages array
             messages.unshift(newMessage);
-            localStorage.setItem('anonymousMessages', JSON.stringify(messages));
+            const saved = saveMessages(messages);
             
-            // Update unread count
-            unreadCount++;
-            
-            // Reset form
-            messageInput.value = '';
-            imageUpload.value = '';
-            fileName.textContent = '';
-            currentImageData = null;
-            imagePreviewContainer.classList.add('hidden');
-            
-            // Show success modal
-            successModal.classList.remove('hidden');
+            if (saved) {
+                // Update unread count
+                unreadCount++;
+                
+                // Reset form
+                messageInput.value = '';
+                imageUpload.value = '';
+                fileName.textContent = '';
+                currentImageData = null;
+                imagePreviewContainer.classList.add('hidden');
+                
+                // Show success modal
+                successModal.classList.remove('hidden');
+            } else {
+                alert('There was an error saving your message. The file might be too large.');
+            }
         });
         
         closeModalBtn.addEventListener('click', () => {
@@ -352,7 +424,7 @@
         // Mark all as read
         markAllReadBtn.addEventListener('click', () => {
             messages = messages.map(msg => ({...msg, read: true}));
-            localStorage.setItem('anonymousMessages', JSON.stringify(messages));
+            saveMessages(messages);
             unreadCount = 0;
             renderMessages();
         });
@@ -361,7 +433,7 @@
         clearAllMessagesBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to delete all messages? This cannot be undone.')) {
                 messages = [];
-                localStorage.setItem('anonymousMessages', JSON.stringify(messages));
+                saveMessages(messages);
                 unreadCount = 0;
                 renderMessages();
             }
@@ -380,8 +452,52 @@
             linkElement.click();
         });
         
+        // Debug messages
+        debugMessagesBtn.addEventListener('click', () => {
+            const debugInfo = {
+                messagesCount: messages.length,
+                unreadCount: messages.filter(msg => !msg.read).length,
+                localStorageAvailable: isLocalStorageAvailable(),
+                localStorageSize: getLocalStorageSize(),
+                messages: messages
+            };
+            
+            debugContent.textContent = JSON.stringify(debugInfo, null, 2);
+            debugModal.classList.remove('hidden');
+        });
+        
+        closeDebug.addEventListener('click', () => {
+            debugModal.classList.add('hidden');
+        });
+        
+        // Check if localStorage is available
+        function isLocalStorageAvailable() {
+            try {
+                const test = 'test';
+                localStorage.setItem(test, test);
+                localStorage.removeItem(test);
+                return true;
+            } catch(e) {
+                return false;
+            }
+        }
+        
+        // Get localStorage size
+        function getLocalStorageSize() {
+            let total = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    total += localStorage[key].length;
+                }
+            }
+            return (total / 1024).toFixed(2) + " KB";
+        }
+        
         // Render messages
         function renderMessages() {
+            // Reload messages from localStorage to ensure we have the latest
+            messages = loadMessages();
+            
             if (messages.length === 0) {
                 messagesContainer.innerHTML = `
                     <div class="text-center text-gray-500 py-8">
@@ -395,7 +511,7 @@
             
             messages.forEach(message => {
                 const messageCard = document.createElement('div');
-                messageCard.className = `message-card bg-white border ${message.read ? 'border-gray-200' : 'border-indigo-300'} rounded-lg shadow-sm p-4 relative`;
+                messageCard.className = `message-card bg-white border ${message.read ? 'border-gray-200' : 'border-red-300'} rounded-lg shadow-sm p-4 relative`;
                 
                 let messageContent = '';
                 
@@ -415,7 +531,7 @@
                 const formattedDate = date.toLocaleString();
                 
                 messageCard.innerHTML = `
-                    ${!message.read ? '<div class="absolute top-4 right-4 h-3 w-3 bg-indigo-500 rounded-full"></div>' : ''}
+                    ${!message.read ? '<div class="absolute top-4 right-4 h-3 w-3 bg-red-500 rounded-full"></div>' : ''}
                     ${messageContent}
                     <div class="flex justify-between items-center mt-2">
                         <span class="text-xs text-gray-500">${formattedDate}</span>
@@ -432,17 +548,18 @@
                 // Mark as read when viewed
                 if (!message.read) {
                     message.read = true;
-                    localStorage.setItem('anonymousMessages', JSON.stringify(messages));
-                    unreadCount--;
                 }
             });
+            
+            // Save the updated read status
+            saveMessages(messages);
             
             // Add delete functionality
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = parseInt(e.currentTarget.dataset.id);
                     messages = messages.filter(msg => msg.id !== id);
-                    localStorage.setItem('anonymousMessages', JSON.stringify(messages));
+                    saveMessages(messages);
                     renderMessages();
                 });
             });
@@ -454,6 +571,11 @@
                 passwordModal.classList.remove('hidden');
             }
         });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Page loaded, messages count:", messages.length);
+        });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'964971159622ce2b',t:'MTc1MzQyMzI3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9649a39896203d35',t:'MTc1MzQyNTM0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
