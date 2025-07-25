@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -151,6 +151,7 @@
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-xl font-semibold text-gray-800">Your Messages</h2>
                     <div class="flex space-x-4">
+                        <button id="refresh-messages" class="text-sm text-red-600 hover:text-red-800">Refresh</button>
                         <button id="mark-all-read" class="text-sm text-red-600 hover:text-red-800">Mark all as read</button>
                         <button id="back-to-home" class="text-red-600 hover:text-red-800 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -260,6 +261,7 @@
         
         // DOM Elements - Admin Page
         const messagesContainer = document.getElementById('messages-container');
+        const refreshMessagesBtn = document.getElementById('refresh-messages');
         const markAllReadBtn = document.getElementById('mark-all-read');
         const backToHome = document.getElementById('back-to-home');
         const clearAllMessagesBtn = document.getElementById('clear-all-messages');
@@ -280,15 +282,24 @@
         // Admin password - Change this to your desired password
         const ADMIN_PASSWORD = "admin123"; // You should change this!
         
+        // Storage key constant
+        const STORAGE_KEY = 'anonymousMessages';
+        
         // Load messages from localStorage
         function loadMessages() {
             try {
-                const storedMessages = localStorage.getItem('anonymousMessages');
+                const storedMessages = localStorage.getItem(STORAGE_KEY);
+                console.log("Raw stored messages:", storedMessages);
+                
                 if (storedMessages) {
-                    return JSON.parse(storedMessages);
+                    const parsedMessages = JSON.parse(storedMessages);
+                    console.log("Parsed messages:", parsedMessages);
+                    return Array.isArray(parsedMessages) ? parsedMessages : [];
                 }
             } catch (error) {
                 console.error("Error loading messages:", error);
+                // Try to recover by clearing the corrupted data
+                localStorage.removeItem(STORAGE_KEY);
             }
             return [];
         }
@@ -296,10 +307,36 @@
         // Save messages to localStorage
         function saveMessages(messages) {
             try {
-                localStorage.setItem('anonymousMessages', JSON.stringify(messages));
+                const jsonString = JSON.stringify(messages);
+                localStorage.setItem(STORAGE_KEY, jsonString);
+                console.log("Messages saved successfully:", messages.length);
                 return true;
             } catch (error) {
                 console.error("Error saving messages:", error);
+                
+                // If the error is likely due to storage limits, try to save without images
+                if (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                    try {
+                        // Create a copy with smaller images or no images
+                        const reducedMessages = messages.map(msg => {
+                            // If message has an image, either remove it or reduce its size
+                            if (msg.image) {
+                                return {
+                                    ...msg,
+                                    image: null, // Remove image to save space
+                                    hadImage: true // Flag that it had an image
+                                };
+                            }
+                            return msg;
+                        });
+                        
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(reducedMessages));
+                        console.log("Saved messages without images due to storage limits");
+                        return true;
+                    } catch (innerError) {
+                        console.error("Failed to save even with reduced data:", innerError);
+                    }
+                }
                 return false;
             }
         }
@@ -356,6 +393,11 @@
             const file = e.target.files[0];
             if (file) {
                 fileName.textContent = file.name;
+                
+                // Check file size before processing
+                if (file.size > 1024 * 1024) { // 1MB
+                    alert('Warning: Large images may not save properly. Consider using a smaller image.');
+                }
                 
                 const reader = new FileReader();
                 reader.onload = (event) => {
@@ -417,6 +459,12 @@
             successModal.classList.add('hidden');
         });
         
+        // Refresh messages
+        refreshMessagesBtn.addEventListener('click', () => {
+            messages = loadMessages();
+            renderMessages();
+        });
+        
         // Mark all as read
         markAllReadBtn.addEventListener('click', () => {
             messages = messages.map(msg => ({...msg, read: true}));
@@ -450,12 +498,33 @@
         
         // Debug messages
         debugMessagesBtn.addEventListener('click', () => {
+            const allLocalStorage = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                try {
+                    const value = localStorage.getItem(key);
+                    allLocalStorage[key] = value.length > 100 ? 
+                        value.substring(0, 100) + '... [truncated, total length: ' + value.length + ']' : 
+                        value;
+                } catch (e) {
+                    allLocalStorage[key] = '[Error reading value]';
+                }
+            }
+            
             const debugInfo = {
                 messagesCount: messages.length,
                 unreadCount: messages.filter(msg => !msg.read).length,
                 localStorageAvailable: isLocalStorageAvailable(),
                 localStorageSize: getLocalStorageSize(),
-                messages: messages
+                localStorageKeys: Object.keys(localStorage),
+                localStorageContents: allLocalStorage,
+                anonymousMessagesRaw: localStorage.getItem(STORAGE_KEY) ? 
+                    localStorage.getItem(STORAGE_KEY).substring(0, 100) + '... [truncated]' : 
+                    'null or empty',
+                messages: messages.map(msg => ({
+                    ...msg,
+                    image: msg.image ? '[Image data exists]' : null
+                }))
             };
             
             debugContent.textContent = JSON.stringify(debugInfo, null, 2);
@@ -483,10 +552,10 @@
             let total = 0;
             for (let key in localStorage) {
                 if (localStorage.hasOwnProperty(key)) {
-                    total += localStorage[key].length;
+                    total += (localStorage[key].length * 2) / 1024 / 1024;
                 }
             }
-            return (total / 1024).toFixed(2) + " KB";
+            return total.toFixed(2) + " MB / ~5MB limit";
         }
         
         // Render messages
@@ -519,6 +588,12 @@
                     messageContent += `
                         <div class="mt-3 mb-3">
                             <img src="${message.image}" alt="Attached image" class="rounded-lg max-h-48 max-w-full">
+                        </div>
+                    `;
+                } else if (message.hadImage) {
+                    messageContent += `
+                        <div class="mt-3 mb-3 p-4 bg-gray-100 rounded-lg text-gray-500 text-center">
+                            [Image was removed to save storage space]
                         </div>
                     `;
                 }
@@ -571,7 +646,18 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             console.log("Page loaded, messages count:", messages.length);
+            
+            // Check if localStorage is working
+            if (!isLocalStorageAvailable()) {
+                alert("Warning: Local storage is not available. Messages won't be saved between sessions.");
+            }
+            
+            // Check if we're close to storage limits
+            const storageSize = parseFloat(getLocalStorageSize());
+            if (storageSize > 4) {
+                alert("Warning: Local storage is almost full. Some messages may not save properly.");
+            }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9649aa23e6f73d35',t:'MTc1MzQyNTYxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9649b0f9c6054ccb',t:'MTc1MzQyNTg5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
